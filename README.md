@@ -38,7 +38,4 @@ Enter the following command in the terminal to run: mysql -u root -p.
 # License
 This program is licensed under MIT
 
-# Screenshot:
-
-
 # Walkthrough Video: 
