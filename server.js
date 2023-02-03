@@ -4,7 +4,6 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const sql = require('sql');
 
-//this will connect to database
 const connect = mysql.createConnection({
     host: 'localhost', 
     user: 'User id or root', 
@@ -12,7 +11,6 @@ const connect = mysql.createConnection({
     database: 'employee_snitch_tracker_db',
 });
 
-//prompt the main page questions
 const prompt = () => {
     inquirer.prompt ([
         {

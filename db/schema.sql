@@ -1,9 +1,6 @@
 DROP DATABASE
-CREATE DATABASE employee_db;
-USE employee_db;
-
-/*auto increment will generate a unique value in the sql table*/
-/*NOT NULL will not allow a null value */
+CREATE DATABASE employee_snitch_tracker_db;
+USE employee_snitch_tracker_db;
 
 CREATE TABLE department (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
