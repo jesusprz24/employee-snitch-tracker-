@@ -28,5 +28,3 @@ VALUES
 ('Pumpkin', 'Head', 3,),
 ('Beetle', 'Juice', 4,);
 
-
-/*is the role_id the employee the number you match will the role? Also what is done will manager_id?*/
