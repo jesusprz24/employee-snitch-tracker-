@@ -39,7 +39,7 @@ function mainMenu() {
         }
     ]);
 
-    .then((answers) => {
+    then((answers) => {
 
         let {choices} = answers;
         if (choices === 'View all departments') {
@@ -153,7 +153,7 @@ function addDepartment () {
     };
 
     function addRole () {
-        inquirer.promt([
+        inquirer.prompt([
             {
                 type: 'input',
                 name: 'role',
@@ -179,9 +179,37 @@ function addDepartment () {
                         return false;
                     }
                 }
-            }, 
-
+            }
         ])
-    }
+
+        then(answer => {
+            const params = [answer.role, answer.salary];
+            const rolesql = `SELECT name, id FROM department`;
+            connection.promise().query(roleSql, (err, data) => {
+                if (err) return err;
+                const department = data.map(({ name, id}) => ({ name: name, value: id }));
+
+                inquirer.prompt ([
+                    {
+                        type: 'list',
+                        name: 'department',
+                        message: 'What department is this role for?',
+                        choices: department
+                    }
+                ])
+                then(departmentChoice => {
+                    const department = departmentChoice.department;
+                    params.push(department);
+
+                    const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
+                    connection.query(sql, params, (err, result) => {
+                        if (err) return err;
+                        console.log('Added ' + answer.role + 'to roles');
+                        showRoles();
+                    });
+                });
+            });
+        });
+    };
 }
 
