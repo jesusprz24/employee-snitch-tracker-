@@ -1,7 +1,7 @@
 const conTable = require('console.table');
 const inquirer = require('inquirer');
 const sql2 = require('mysql2');
-const mysql = require('mysql');
+const sql = require('mysql');
 
 const connect = mysql.createConnection({
     host: 'localhost', 
@@ -10,11 +10,19 @@ const connect = mysql.createConnection({
     database: 'employee_snitch_tracker_db',
 });
 
-const prompt = () => {
+//establish the database and give the intro title
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('\n WELCOME TO EMPLOYEE SNITCH TRACKER \n');
+    mainMenu();
+})
+
+//should be displayed on the main menu
+function mainMenu() {
     inquirer.prompt ([
         {
-            type: 'list',
             name: 'choices',
+            type: 'list',
             message: 'What would you like to do?',
             choices: ['View all departments', 
                       'View all roles', 
@@ -31,9 +39,9 @@ const prompt = () => {
         }
     ]);
 
-    then((answers) => {
-        let {choices} = answers;
+    .then((answers) => {
 
+        let {choices} = answers;
         if (choices === 'View all departments') {
             showDepartments();
         }
@@ -85,24 +93,95 @@ const prompt = () => {
     });
 };
 
-presentDepartments = () => {
-    console.log('departments working');
+function viewDepartment () {
+    console.log('Departments are being displayed');
     const sql = `SELECT department.id AS id, department.name AS department FROM department`;
     conncetion.promise().query(sql, (err, rows) => {
-        if(err) throw err;
+        if(err) return err;
         console.table(rows);
         promptUser();
     });
 };
 
-presentRoles = () => {
-    console.log('roles are being presented');
+function viewRole () {
+    console.log('Roles are being displayed');
     const sql = `SELECT role.id role.title, department.name AS department FROM role INNER JOIN department ON 
     role.department_id = department.id`;
     conncetion.promise().query(sql, (err, rows) => {
-        if(err) throw err;
+        if(err) return err;
         console.table(rows);
         promptUser();
     });
 };
+
+function viewEmployee () {
+    console.log(`Employees are being displayed`);           //CHECK TO SEE IF THIS IS THE RIGHT WAY TO DO THIS, IT SEEMS LIKE I'M MISSING SOMETHING!!!
+    const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department. role.salary`;
+    connection.promise().query(sql, (err, rows) => {
+        if (err) return err;
+        console.table(rows);
+        promptUser();
+    });
+};
+
+function addDepartment () {
+    addDepartment = () => {
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'addDepartment',
+                message: 'What department would you like to add?',
+                validate: addDepartment => {
+                    if (addDepartment) {
+                        return true;
+                    } else {
+                        console.log('Please enter a department');
+                        return false;
+                    }
+                }
+            }
+        ])
+
+        .then(answer => {
+            const sql = `INSERT INTO department (name) VALUES (?)`;
+            connection.query(sql, answer.addDepartment, (err, result) => {
+                if (err) return err;
+                console.log('Added ' + answer.addDepartment + 'to departments');
+                showDepartments();
+            });
+        });
+    };
+
+    function addRole () {
+        inquirer.promt([
+            {
+                type: 'input',
+                name: 'role',
+                message: 'What rrole would you like to add?',
+                validate: addRole => {
+                    if (addRole) {
+                        return true;
+                    } else {
+                        console.log('Please enter a role');
+                        return false;
+                    }
+                }
+            }, 
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'What is the salary range you would like to enter?',
+                validate: addSalary => {
+                    if (isNaN(addSalary)) {                                     //isNaN checks to see if it's a number or not, return true is is NaN
+                        return true;
+                    } else {
+                        console.log('Please ener a valid salary');
+                        return false;
+                    }
+                }
+            }, 
+
+        ])
+    }
+}
 
