@@ -172,7 +172,7 @@ function addDepartment () {
                 name: 'salary',
                 message: 'What is the salary range you would like to enter?',
                 validate: addSalary => {
-                    if (isNaN(addSalary)) {                                     //isNaN checks to see if it's a number or not, return true is is NaN
+                    if (isNaN(addSalary)) {
                         return true;
                     } else {
                         console.log('Please ener a valid salary');
@@ -287,7 +287,4 @@ function addDepartment () {
             })
         })
     };
-
-    
 }
-
