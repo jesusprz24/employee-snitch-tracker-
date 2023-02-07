@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
-const conTable = require('console.table');
-const sql2 = require('mysql2');
-const sql = require('mysql');
+const consoleTable = require('console.table');
+const mysql2 = require('mysql2');
+const mysql = require('mysql');
 
 const connect = mysql.createConnection({
     host: 'localhost', 
@@ -17,7 +17,7 @@ connection.connect((err) => {
     mainMenu();
 })
 
-//should be displayed on the main menu
+//should be displayed on the main menu?
 function mainMenu() {
     inquirer.prompt ([
         {
