@@ -43,19 +43,19 @@ function mainMenu() {
 
         let {choices} = answers;
         if (choices === 'View all departments') {
-            showDepartments();
+            viewDepartments();
         }
 
         if (choices === 'View all roles') {
-            showRoles();
+            viewRoles();
         }
 
         if (choices === 'View all employees') {
-            showEmployees();
+            viewEmployees();
         }
 
         if (choices === 'Add a department') {
-            addDepartments();
+            addDepartment();
         }
 
         if (choices === 'Add a role') {
@@ -63,7 +63,7 @@ function mainMenu() {
         }
 
         if (choices === 'Add an employee') {
-            addEmployees();
+            addEmployee();
         }
 
         if (choices === 'Update an employee role') {
@@ -93,7 +93,7 @@ function mainMenu() {
     });
 };
 
-function viewDepartment () {
+function viewDepartments () {
     console.log('Departments are being displayed');
     const sql = `SELECT department.id AS id, department.name AS department FROM department`;
     connect.promise().query(sql, (err, rows) => {
@@ -103,7 +103,7 @@ function viewDepartment () {
     });
 };
 
-function viewRole () {
+function viewRoles () {
     console.log('Roles are being displayed');
     const sql = `SELECT role.id role.title, department.name AS department FROM role INNER JOIN department ON 
     role.department_id = department.id`;
@@ -114,7 +114,7 @@ function viewRole () {
     });
 };
 
-function viewEmployee () {
+function viewEmployees () {
     console.log(`Employees are being displayed`);           
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department. role.salary`;
     connect.promise().query(sql, (err, rows) => {
@@ -143,7 +143,7 @@ function addDepartment ()
         ])
 
         .then(answer => {
-            const sql = `INSERT INTO department (name) VALUES (?)`;
+            const sql = `INSERT INTO department (name) VALUES`;
             connect.query(sql, answer.addDepartment, (err, result) => {
                 if (err) return err;
                 console.log('Added ' + answer.addDepartment + 'to departments');
@@ -157,7 +157,7 @@ function addDepartment ()
             {
                 type: 'input',
                 name: 'role',
-                message: 'What rrole would you like to add?',
+                message: 'What role would you like to add?',
                 validate: addRole => {
                     if (addRole) {
                         return true;
