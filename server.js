@@ -5,13 +5,13 @@ const mysql = require('mysql');
 
 const connect = mysql.createConnection({
     host: 'localhost', 
-    user: 'User id or root', 
-    password: 'Password',
-    database: 'employee_snitch_tracker_db',
+    user: 'root', 
+    password: 'password',
+    database: 'employee_db',
 });
 
 //establish the database and give the intro title
-connection.connect((err) => {
+connect.connect((err) => {
     if (err) throw err;
     console.log('\n WELCOME TO EMPLOYEE SNITCH TRACKER \n');
     mainMenu();
@@ -37,9 +37,9 @@ function mainMenu() {
                       'Delete an employee',
                       'Exit']
         }
-    ]);
+    ])
 
-    then((answers) => {
+    .then((answers) => {
 
         let {choices} = answers;
         if (choices === 'View all departments') {
@@ -96,7 +96,7 @@ function mainMenu() {
 function viewDepartment () {
     console.log('Departments are being displayed');
     const sql = `SELECT department.id AS id, department.name AS department FROM department`;
-    conncetion.promise().query(sql, (err, rows) => {
+    connection.promise().query(sql, (err, rows) => {
         if(err) return err;
         console.table(rows);
         promptUser();
@@ -107,7 +107,7 @@ function viewRole () {
     console.log('Roles are being displayed');
     const sql = `SELECT role.id role.title, department.name AS department FROM role INNER JOIN department ON 
     role.department_id = department.id`;
-    conncetion.promise().query(sql, (err, rows) => {
+    connection.promise().query(sql, (err, rows) => {
         if(err) return err;
         console.table(rows);
         promptUser();
@@ -115,7 +115,7 @@ function viewRole () {
 };
 
 function viewEmployee () {
-    console.log(`Employees are being displayed`);           //CHECK TO SEE IF THIS IS THE RIGHT WAY TO DO THIS, IT SEEMS LIKE I'M MISSING SOMETHING!!!
+    console.log(`Employees are being displayed`);           
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department. role.salary`;
     connection.promise().query(sql, (err, rows) => {
         if (err) return err;
@@ -182,7 +182,7 @@ function addDepartment () {
             }
         ])
 
-        then(answer => {
+        .then(answer => {
             const params = [answer.role, answer.salary];
             const rolesql = `SELECT name, id FROM department`;
             connection.promise().query(roleSql, (err, data) => {
