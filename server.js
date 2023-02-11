@@ -87,7 +87,7 @@ function mainMenu() {
         }
 
         if (choices === 'Exit') {
-            connection.end()
+            connect.end()
         };
 
     });
@@ -96,7 +96,7 @@ function mainMenu() {
 function viewDepartment () {
     console.log('Departments are being displayed');
     const sql = `SELECT department.id AS id, department.name AS department FROM department`;
-    connection.promise().query(sql, (err, rows) => {
+    connect.promise().query(sql, (err, rows) => {
         if(err) return err;
         console.table(rows);
         promptUser();
@@ -107,7 +107,7 @@ function viewRole () {
     console.log('Roles are being displayed');
     const sql = `SELECT role.id role.title, department.name AS department FROM role INNER JOIN department ON 
     role.department_id = department.id`;
-    connection.promise().query(sql, (err, rows) => {
+    connect.promise().query(sql, (err, rows) => {
         if(err) return err;
         console.table(rows);
         promptUser();
@@ -117,7 +117,7 @@ function viewRole () {
 function viewEmployee () {
     console.log(`Employees are being displayed`);           
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department. role.salary`;
-    connection.promise().query(sql, (err, rows) => {
+    connect.promise().query(sql, (err, rows) => {
         if (err) return err;
         console.table(rows);
         promptUser();
@@ -144,7 +144,7 @@ function addDepartment ()
 
         .then(answer => {
             const sql = `INSERT INTO department (name) VALUES (?)`;
-            connection.query(sql, answer.addDepartment, (err, result) => {
+            connect.query(sql, answer.addDepartment, (err, result) => {
                 if (err) return err;
                 console.log('Added ' + answer.addDepartment + 'to departments');
                 showDepartments();
@@ -185,7 +185,7 @@ function addDepartment ()
         .then(answer => {
             const params = [answer.role, answer.salary];
             const rolesql = `SELECT name, id FROM department`;
-            connection.promise().query(roleSql, (err, data) => {
+            connect.promise().query(roleSql, (err, data) => {
                 if (err) return err;
                 const department = data.map(({ name, id}) => ({ name: name, value: id }));
 
@@ -202,7 +202,7 @@ function addDepartment ()
                     params.push(department);
 
                     const sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
-                    connection.query(sql, params, (err, result) => {
+                    connect.query(sql, params, (err, result) => {
                         if (err) return err;
                         console.log('Added ' + answer.role + 'to roles');
                         showRoles();
@@ -244,7 +244,7 @@ function addDepartment ()
         .then(anwer => {
             const params = [answer.firstname, answer.lastName]
             const rolesql = `SELECT role.id, role.title, FROM role`;
-            connection.promise().query(rolesql, (err, data) => {
+            connect.promise().query(rolesql, (err, data) => {
                 if (err) return err;
                 const roles = data.map(({ id, title}) => ({ name: title, value: id}));
                 inquirer.prompt([
@@ -259,7 +259,7 @@ function addDepartment ()
                     const role = roleChoice.role;
                     params.push(role);
                     const managerSql = `SELECT * FROM employee`;
-                    connecton.promise().query(managerSql, (err, data) => {
+                    connect.promise().query(managerSql, (err, data) => {
                         if (err) return err;
                         const managers = data.map(({id, first_name, last_name }) => ({ name: first_name + '' + last_name, value: id}));
                         console.log(managers);
@@ -276,7 +276,7 @@ function addDepartment ()
                             const manager = managerChoice.manager;
                             params.push(manager);
                             const sql = `INSERT INTO employee (first_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
-                            connection.query(sql, params, (err, result) => {
+                            connect.query(sql, params, (err, result) => {
                                 if (err) return err;
                                 console.log('Employee has been added');
                                 showEmployees();
