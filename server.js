@@ -124,8 +124,8 @@ function viewEmployee () {
     });
 };
 
-function addDepartment () {
-    addDepartment = () => {
+function addDepartment ()
+        {
         inquirer.prompt([
             {
                 type: 'input',
@@ -287,4 +287,4 @@ function addDepartment () {
             })
         })
     };
-}
+//removed }
